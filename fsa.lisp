@@ -7,7 +7,10 @@
              ,then)
            ,else))))
 
-(defun state (name accept transitions)
+(defun random-elt (list)
+  (nth (random (length list)) list))
+
+(defun state/acc (name accept transitions)
   `(,name (symbols)
           (split symbols
                  (case hd
@@ -16,14 +19,33 @@
                              '((t nil))))
                  ,accept)))
 
-(defmacro fsa (name &body states)
-  `(defun ,name (symbols)
+(defun state/gen (name accept transitions)
+  `(,name (symbols)
+          (let ((next-transition (random-elt ',(append transitions
+                                                       (if accept '(accept) nil)))))
+            (if (eq next-transition 'accept)
+                nil
+                (destructuring-bind (symbol state) next-transition
+                  (case state
+                    ,@(loop for (symbol state) in transitions
+                         collect `(,state (cons symbol
+                                                (,state symbols))))))))))
+
+(defmacro fsa (name state-fn &body states)
+  `(defun ,name (&optional symbols)
      (labels ,(loop for state in states
                  collect (split state
-                                (state hd
+                                (funcall state-fn hd
                                        (not (not (member 'accept tl)))
                                        (remove-if (lambda (x) (member x '(start accept))) tl))
                                 nil))
        (,(or (car (find 'start states))
             (caar states))
          symbols))))
+
+(defmacro fsa/acceptor (name &body states)
+  `(fsa ,name state/acc ,@states))
+
+(defmacro fsa/generator (name &body states)
+  `(fsa ,name state/gen ,@states))
+

@@ -49,3 +49,12 @@
 (defmacro fsa/generator (name &body states)
   `(fsa ,name state/gen ,@states))
 
+(defmacro fsas (name &body states)
+  (flet ((symbol-extend (symbol suffix)
+           (intern (concatenate 'string
+                                (symbol-name symbol)
+                                (string-upcase suffix)))))
+    `(progn
+       (fsa/acceptor ,(symbol-extend name "-acceptor") ,@states)
+       (fsa/generator ,(symbol-extend name "-generator") ,@states))))
+

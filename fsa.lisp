@@ -31,30 +31,34 @@
                          collect `(,state (cons symbol
                                                 (,state symbols))))))))))
 
-(defmacro fsa (name state-fn &body states)
-  `(defun ,name (&optional symbols)
-     (labels ,(loop for state in states
+
+(defmacro fsa (state-fn &body states)
+  `(lambda (&optional symbols)
+    (labels ,(loop for state in states
                  collect (split state
                                 (funcall state-fn hd
-                                       (not (not (member 'accept tl)))
-                                       (remove-if (lambda (x) (member x '(start accept))) tl))
+                                         (not (not (member 'accept tl)))
+                                         (remove-if (lambda (x) (member x '(start accept))) tl))
                                 nil))
        (,(or (car (find 'start states))
             (caar states))
          symbols))))
 
-(defmacro fsa/acceptor (name &body states)
-  `(fsa ,name state/acc ,@states))
+(defmacro define-fsa (name state-fn &body states)
+  `(setf (symbol-function ',name)
+         (fsa ,state-fn ,@states)))
 
-(defmacro fsa/generator (name &body states)
-  `(fsa ,name state/gen ,@states))
+(defmacro define-acceptor (name &body states)
+  `(define-fsa ,name state/acc ,@states))
 
-(defmacro fsas (name &body states)
+(defmacro define-generator (name &body states)
+  `(define-fsa ,name state/gen ,@states))
+
+(defmacro define-fsas/acceptor-generator (name &body states)
   (flet ((symbol-extend (symbol suffix)
            (intern (concatenate 'string
                                 (symbol-name symbol)
                                 (string-upcase suffix)))))
     `(progn
-       (fsa/acceptor ,(symbol-extend name "-acceptor") ,@states)
-       (fsa/generator ,(symbol-extend name "-generator") ,@states))))
-
+       (define-acceptor ,(symbol-extend name "/acceptor") ,@states)
+       (define-generator ,(symbol-extend name "/generator") ,@states))))

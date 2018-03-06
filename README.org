@@ -1,8 +1,8 @@
 * FSA
 ** About This Package
-   FSA is a domain-specific language for creating *F*inite *S*tate
-   *A*utomata. Users may extend FSA, defining their own automata by
-   defining new ~state-fn~s. See [[*Standard Parameters][Standard Parameters]] for more.
+   FSA is a domain-specific language for creating *Finite State
+   Automata*. Users may extend FSA, defining their own automata by
+   defining new ~state-fns~. See [[*Standard Parameters][Standard Parameters]] for more.
 ** How To Use This Package
    Invoke any of the macros ~fsa~, ~define-fsa~, ~define-generator~, and
    ~define-fsas/acceptor-generator~. An explanation of these macros

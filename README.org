@@ -3,6 +3,12 @@
    FSA is a domain-specific language for creating *Finite State
    Automata*. Users may extend FSA, defining their own automata by
    defining new ~state-fns~. See [[*Standard Parameters][Standard Parameters]] for more.
+
+   I was inspired to create this package while reading through Speech
+   and Language Processing, by Jurafsky and Martin. It seemed clear
+   to me in their discussion of FSAs that they represented exactly the
+   sort of language extension Lisp's macros exist for. I'm having a
+   lot of fun writing it! Suggestions welcome.
 ** How To Use This Package
    Invoke any of the macros ~fsa~, ~define-fsa~, ~define-generator~, and
    ~define-fsas/acceptor-generator~. An explanation of these macros

@@ -2,20 +2,20 @@
 ** About This Package
    FSA is a domain-specific language for creating *F*inite *S*tate
    *A*utomata. Users may extend FSA, defining their own automata by
-   defining new `state-fn`s. See [[*Standard Parameters][Standard Parameters]] for more.
+   defining new ~state-fn~s. See [[*Standard Parameters][Standard Parameters]] for more.
 ** How To Use This Package
-   Invoke any of the macros `fsa`, `define-fsa`, `define-generator`, and
-   `define-fsas/acceptor-generator`. An explanation of these macros
+   Invoke any of the macros ~fsa~, ~define-fsa~, ~define-generator~, and
+   ~define-fsas/acceptor-generator~. An explanation of these macros
    follows under [[*Macros][Macros]]. An explanation of the parameters
-   `state-fn` and `states` follows under heading [[*Standard Parameters][Standard Parameters]].
+   ~state-fn~ and ~states~ follows under heading [[*Standard Parameters][Standard Parameters]].
 *** Macros
 **** *Macro* fsa: state-fn &body states
-     `fsa` produces an anonymous FSA, using `state-fn` to transform
-     `states` into the appropriate behavior. The output of `fsa` is a
+     ~fsa~ produces an anonymous FSA, using ~state-fn~ to transform
+     ~states~ into the appropriate behavior. The output of ~fsa~ is a
      \lambda.
 **** *Macro* define-fsa: name state-fn &body states
-     `define-fsa` binds an `fsa` using `state-fn` and `states` to
-     `name`. `name` will be a function (#'name).
+     ~define-fsa~ binds an ~fsa~ using ~state-fn~ and ~states~ to
+     ~name~. ~name~ will be a function (#'name).
      #+begin_src lisp
      (define-fsa test *state-fn* *fsa-body*) ===
      (setf (symbol-function 'test)
@@ -23,13 +23,13 @@
      #+end_src
 *** Standard Parameters
 **** *Function* state-fn: name accept transitions
-     A valid `state-fn` will expand its arguments into a `defun`-like
+     A valid ~state-fn~ will expand its arguments into a ~defun~-like
      form.
      Internally, FSA will call its states as local functions
-     defined in a `labels` form. FSA will call `state-fn` inside that
-     `labels` form.
+     defined in a ~labels~ form. FSA will call ~state-fn~ inside that
+     ~labels~ form.
 ***** *Example:* state/acc
-      `state/acc` is a built-in `state-fn` for defining a basic
+      ~state/acc~ is a built-in ~state-fn~ for defining a basic
       acceptor FSA.
       #+begin_src lisp
         (defun state/acc (name accept transitions)
@@ -55,11 +55,11 @@
                      (t nil))
                     t))
       #+end_src
-      This `state-fn` expands each transition in `transitions` into a
-      `case` clause matching `symbol` and jumping to `state` on the
+      This ~state-fn~ expands each transition in ~transitions~ into a
+      ~case~ clause matching ~symbol~ and jumping to ~state~ on the
       rest of the input. See [[**Argument* Transitions: (list-of (symbol state))][Transitions]] for more.
 **** *Argument* Transitions: (list-of (symbol state))
-     `transitions` is a list of (symbol state) pairs, where `symbol`
-     and `state` are both (Lisp) symbols. As expected, it represents a
-     list of transitions on `symbol` to `state`. `state` should be the
+     ~transitions~ is a list of (symbol state) pairs, where ~symbol~
+     and ~state~ are both (Lisp) symbols. As expected, it represents a
+     list of transitions on ~symbol~ to ~state~. ~state~ should be the
      name of a state defined in the body of the surrounding FSA.

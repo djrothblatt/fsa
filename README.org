@@ -69,3 +69,12 @@
      and ~state~ are both (Lisp) symbols. As expected, it represents a
      list of transitions on ~symbol~ to ~state~. ~state~ should be the
      name of a state defined in the body of the surrounding FSA.
+** Extensions
+*** TODO Non-determinism
+    FSAs may be deterministic (DFAs) or non-deterministic (NFSAs). At
+    this point, only determinism is supported. This is OK
+    preliminarily because DFAs and NFSAs are equivalent in generative
+    power; they can generate/accept exactly the same languages.
+    However, non-determinism is useful and potentially a fun
+    exercise. I will likely use a backtracking algorithm to implement
+    non-determinism.
